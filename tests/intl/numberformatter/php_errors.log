@@ -1,0 +1,2 @@
+[02-Jul-2019 16:00:25 America/New_York] PHP Parse error:  syntax error, unexpected '=' in D:\www\framework\tests\language_tests\intl\numberformatter\NumberFormatterIntegerParseTest.php on line 218
+[05-Dec-2019 12:47:32 America/New_York] PHP Parse error:  syntax error, unexpected '>', expecting identifier (T_STRING) or variable (T_VARIABLE) or '{' or '$' in D:\www\framework\tests\language_tests\intl\numberformatter\NumberFormatterNegationAffirmationParseTest.php on line 57

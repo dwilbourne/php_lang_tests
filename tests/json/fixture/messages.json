@@ -1,0 +1,44 @@
+[
+	{
+		"code": 100,
+		"name": "InvalidTimezone",
+		"translations": [
+			{"en": "Invalid timezone (%s)."}
+			]
+	},
+	{
+		"code": 101,
+		"name": "InvalidUTCOffset",
+		"translations": [
+			{"en": "Invalid UTCOffset (%s)."}
+			]
+	},
+	{
+		"code": 102,
+		"name": "InvalidCharsetString",
+		"translations": [
+			{"en": "Invalid charset string (%s)."}
+			]
+	},
+	{
+		"code": 103,
+		"name": "InvalidCharsetConstant",
+		"translations": [
+			{"en": "Invalid charset constant (%s)."}
+			]
+	},
+	{
+		"code": 104,
+		"name": "InvalidISOCountryCode",
+		"translations": [
+			{"en": "Invalid ISO Country Code (%s)."}
+			]
+	},
+	{
+		"code": 105,
+		"name": "InvalidLocale",
+		"translations": [
+			{"en": "Invalid locale (%s)."}
+			]
+	}
+]
