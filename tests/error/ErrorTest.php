@@ -10,6 +10,7 @@ namespace tests\error;
 
 use tests\error\fixture\ArgumentCountErrorFixture;
 use PHPUnit\Framework\TestCase;
+use Throwable;
 
 /**
  * I don't know of an instance where PHP will throw an instance of the base class ('\Error').  If there is one,
@@ -52,16 +53,14 @@ class ErrorTest extends TestCase
      *
      */
 
-    public function testArithmeticError_1()
+    public function testArithmeticError_1() : void
     {
         $this->expectException('\ArithmeticError');
         $c = intdiv(PHP_INT_MIN, -1);
     }
 
-    public function testArithmeticError_2()
+    public function testArithmeticError_2() : void
     {
-
-
         $this->expectException('\ArithmeticError');
         $c = 4 << -2;
     }
@@ -83,13 +82,13 @@ class ErrorTest extends TestCase
      * This method works only if zend.assertions = 1 and assert.exception = on in the php ini file.
      */
 
-    public function onAssertionFailureCallback()
+    public function onAssertionFailureCallback() : void
     {
         $e = new \AssertionError();
         throw $e;
     }
 
-    public function testAssertionError()
+    public function testAssertionError() : void
     {
         $this->expectException('\AssertionError');
         assert_options(ASSERT_CALLBACK, 'onAssertionFailureCallback');
@@ -101,7 +100,7 @@ class ErrorTest extends TestCase
      *
      * modulus function throws DivisionByZeroError as expected
      */
-    public function testDivisionByZeroErrorModulus()
+    public function testDivisionByZeroErrorModulus() : void
     {
         $this->expectException('\DivisionByZeroError');
         $c = 5 % 0;
@@ -113,7 +112,7 @@ class ErrorTest extends TestCase
      * intdiv function throws DivisionByZeroError as expected
      *
      */
-    public function testDivisionByZeroErrorIntDiv()
+    public function testDivisionByZeroErrorIntDiv() : void
     {
         $this->expectException('\DivisionByZeroError');
         $c = intdiv(5, 0);
@@ -125,7 +124,7 @@ class ErrorTest extends TestCase
      * PHP issues a warning not an error for standard divide by zero.
      *
      */
-    public function testDivisionByZeroRegularDiv()
+    public function testDivisionByZeroRegularDiv() : void
     {
         set_error_handler(function () {
             throw new \DivisionByZeroError();
@@ -135,7 +134,7 @@ class ErrorTest extends TestCase
         restore_error_handler();
     }
 
-    public function testDivisionByZeroErrorIsArithmeticError()
+    public function testDivisionByZeroErrorIsArithmeticError() : void
     {
         try {
             $c = intdiv(5, 0);
@@ -144,7 +143,7 @@ class ErrorTest extends TestCase
         }
     }
 
-    public function testParseError()
+    public function testParseError() : void
     {
         $this->expectException('\ParseError');
         eval('if(1 >');
@@ -161,7 +160,7 @@ class ErrorTest extends TestCase
      * -----------------------
     */
 
-    public function testTypeErrorBadArgumentType()
+    public function testTypeErrorBadArgumentType() : void
     {
         $closure = function (string $a) {
             return $a;
@@ -172,7 +171,7 @@ class ErrorTest extends TestCase
         $b = $closure(9);
     }
 
-    public function testTypeErrorBadReturnType()
+    public function testTypeErrorBadReturnType() : void
     {
         $closure = function (string $a): int {
             return $a;
@@ -194,7 +193,7 @@ class ErrorTest extends TestCase
      *
      */
 
-    public function testArgumentCountErrorUserDefinedFunction()
+    public function testArgumentCountErrorUserDefinedFunction() : void
     {
 
         $fixture = new ArgumentCountErrorFixture();
@@ -202,13 +201,13 @@ class ErrorTest extends TestCase
         $fixture->foo(1);
     }
 
-    public function testArgumentCountErrorBuiltInFunction()
+    public function testArgumentCountErrorBuiltInFunction() : void
     {
         $this->expectException('\ArgumentCountError');
         $c = strlen('abcde', 9);
     }
 
-    public function testArgumentCountErrorIsTypeError()
+    public function testArgumentCountErrorIsTypeError() : void
     {
         try {
             $c = strlen('abcde', 9);
