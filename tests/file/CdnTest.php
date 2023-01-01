@@ -5,7 +5,7 @@
  * @version: 1.0
  */
 
-namespace tests;
+namespace tests\file;
 
 use PHPUnit\Framework\TestCase;
 

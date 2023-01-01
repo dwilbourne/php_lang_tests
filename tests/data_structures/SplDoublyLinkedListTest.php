@@ -5,7 +5,7 @@
  * @version: 1.0
  */
 
-namespace pvcTest;
+namespace tests\data_structures;
 
 use PHPUnit\Framework\TestCase;
 
@@ -23,24 +23,28 @@ class SplDoublyLinkedListTest extends TestCase {
         $this->list->add(1, 'c');
         $this->list->add(1, 'b');
 
+		// b is inserted ahead of c
         $this->assertEquals('b', $this->list->offsetGet(1));
         $this->assertEquals('c', $this->list->offsetGet(2));
 
         $this->assertEquals(3, count($this->list));
 
+		// remove b
         $this->list->offsetUnset(1);
+		// list has 2 elements, not 3
         $this->assertFalse($this->list->offsetExists(2));
+		// index of c has gone from 2 to 1, e.g. list has been reindexed
         $this->assertEquals('c', $this->list->offsetGet(1));
 
         // offsetSet behaves like 'update', not like 'add'
         $this->list->offsetSet(1, 'b');
         $this->assertEquals('b', $this->list->offsetGet(1));
         $this->assertFalse($this->list->offsetExists(2));
-
     }
 
+	// indices must be integers
     function testBadIndex1() {
-        $this->expectException('OutOfRangeException');
+        $this->expectException('TypeError');
         $this->list->add('a', 'value');
     }
 
