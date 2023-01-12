@@ -27,4 +27,22 @@ class TestNullEmpty extends TestCase
         self::assertTrue(empty(0));
     }
 
+	public function testNotInitializedProperty() : void
+	{
+		$fixture = new Fixture();
+		$this->expectException(\Error::class);
+		$foo = $fixture->getFoo();
+	}
+
+	public function testInitializeAndThenSetToNull() : void
+	{
+		$fixture = new Fixture();
+		$testString = 'some string';
+		$fixture->setFoo($testString);
+		self::assertEquals($testString, $fixture->getFoo());
+
+		$fixture->setFoo(null);
+		self::assertNull($fixture->getFoo());
+	}
+
 }
