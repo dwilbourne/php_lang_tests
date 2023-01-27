@@ -27,4 +27,16 @@ class ReflectionTest extends TestCase
         }
         self::assertTrue(true);
     }
+
+    public function testReflectClassWithNoNamespace(): void
+    {
+        /**
+         * you have to require the file manually: classes without namespaces will not autoload unless you modify the
+         * autoload section of composer.json.
+         */
+        require 'tests/reflection/fixtures/ClassWithNoNamespace.php';
+        $class = new \ClassWithNoNamespace();
+        $reflection = new \ReflectionClass($class);
+        self::assertInstanceOf(\ReflectionClass::class, $reflection);
+    }
 }
