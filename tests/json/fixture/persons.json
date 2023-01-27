@@ -1,4 +1,5 @@
-[{
+[
+	{
 	"id": 1,
 	"name": "Max Adams",
 	"born": "21 Oct 2001",
@@ -7,7 +8,8 @@
 		{"make": "Audi", "model": "Q8" }
 	],
 	"favourite": { "colour": "Blue", "movie": "Toy Story" }
-},
+	},
+
 	{
 		"id": 2,
 		"name": "Steven Miller",
@@ -25,4 +27,5 @@
 			{"make": "Bugatti", "model": "Chiron"}
 		],
 		"favourite": { "colour": "Yellow", "movie": "Frozen", "toy": "Teddy" }
-	}]
+	}
+]
