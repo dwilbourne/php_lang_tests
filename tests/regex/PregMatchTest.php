@@ -20,4 +20,43 @@ class PregMatchTest extends TestCase
         self::assertEquals(1, preg_match($pattern, $subject));
     }
 
+    public function countMessageVariables(string $messageTemplate): int
+    {
+        /**
+         * starts with '${', character class includes any combo of characters except '}' (at least one), finishes
+         * with a '}'.
+         *
+         * Thought about restricting the characters in the character class to those that can be in a legitimate
+         * variable name, but PHP itself would kick those out with a
+         * compile error when you created the exception with bad dummy variable names, so we can afford to slack here
+         * a little bit.....
+         *
+         * preg_match_all returns the number of matches found.
+         */
+        $regex = '/\$\{[^}]+\}/';
+        return preg_match_all($regex, $messageTemplate);
+    }
+
+    protected function dataProvider() : array
+    {
+        return [
+            //'messageWithNoParameters' => ['This is a test message', 0],
+            'messageWithOneParameter' => ['Your function parameter ${param} is invalid.', 1],
+            'messageWithTwoParameters' => ['preg match failed.  regex = ${regex}, subject = ${subject}', 2],
+            'messageWithThreeParameters' => ['preg replace failed.  regex = ${regex}, subject = ${subject}, replace = ${replace}', 3],
+            'messageWithMalformedParameter' => ['Your function parameter ${param is invalid.', 0],
+        ];
+    }
+
+    /**
+     * @function testCountXMessageVariables
+     * @param string $message
+     * @param int $expectNumParameters
+     * @dataProvider dataProvider
+     */
+    public function testCountXMessageVariables(string $message, int $expectNumParameters): void
+    {
+        self::assertEquals($expectNumParameters, $this->countMessageVariables($message));
+    }
+
 }
