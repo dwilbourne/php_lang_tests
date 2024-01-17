@@ -62,4 +62,20 @@ class FilterVarTest extends TestCase {
         ];
     }
 
+    public function testFilterVarUrl(): void
+    {
+        $filter = FILTER_VALIDATE_URL;
+        $optionsArray = ['optionsArray' => ['flags' => FILTER_FLAG_PATH_REQUIRED]];
+        $goodUrlString = 'http://www.somehost.com/support';
+        self::assertEquals($goodUrlString, filter_var($goodUrlString, $filter, $optionsArray));
+        $badUrlString = 'notUrl';
+        self::assertFalse(filter_var($badUrlString, $filter, $optionsArray));
+    }
+
+    public function testFilterVarEmail(): void
+    {
+        $filter = FILTER_VALIDATE_EMAIL;
+        $flag = FILTER_FLAG_EMAIL_UNICODE;
+    }
+
 }

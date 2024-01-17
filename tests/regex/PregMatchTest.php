@@ -33,14 +33,14 @@ class PregMatchTest extends TestCase
          *
          * preg_match_all returns the number of matches found.
          */
-        $regex = '/\$\{[^}]+\}/';
+        $regex = '/\$\{[^}]+}/';
         return preg_match_all($regex, $messageTemplate);
     }
 
     protected function dataProvider() : array
     {
         return [
-            //'messageWithNoParameters' => ['This is a test message', 0],
+            'messageWithNoParameters' => ['This is a test message', 0],
             'messageWithOneParameter' => ['Your function parameter ${param} is invalid.', 1],
             'messageWithTwoParameters' => ['preg match failed.  regex = ${regex}, subject = ${subject}', 2],
             'messageWithThreeParameters' => ['preg replace failed.  regex = ${regex}, subject = ${subject}, replace = ${replace}', 3],
@@ -57,6 +57,30 @@ class PregMatchTest extends TestCase
     public function testCountXMessageVariables(string $message, int $expectNumParameters): void
     {
         self::assertEquals($expectNumParameters, $this->countMessageVariables($message));
+    }
+
+    protected function dataProviderGetVariables() : array
+    {
+        return [
+            'messageWithNoParameters' => ['This is a test message', []],
+            'messageWithOneParameter' => ['Your function parameter ${param} is invalid.', ['param']],
+            'messageWithTwoParameters' => ['preg match failed.  regex = ${regex}, subject = ${subject}', ['regex', 'subject']],
+            'messageWithThreeParameters' => ['preg replace failed.  regex = ${regex}, subject = ${subject}, replace = ${replace}', ['regex', 'subject', 'replace']],
+            'messageWithMalformedParameter' => ['Your function parameter ${param is invalid.', []],
+        ];
+    }
+
+    /**
+     * testGetMessageVariables
+     * @param string $messageTemplate
+     * @param array $messageVariablesArray
+     * @dataProvider dataProviderGetVariables
+     */
+    public function testGetMessageVariables(string $messageTemplate, array $messageVariablesArray): void
+    {
+        $regex = '/\$\{([^}]+)}/';
+        $pregResult = preg_match_all($regex, $messageTemplate, $matches);
+        self::assertEqualsCanonicalizing($messageVariablesArray, $matches[1]);
     }
 
 }
