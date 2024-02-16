@@ -28,13 +28,20 @@ class NumberFormatterGroupingTest extends TestCase {
 
         // now turn grouping used off
         $this->frmtr->setAttribute(\NumberFormatter::GROUPING_USED, false);
-        $expectedPattern = '#0.###';
+        $expectedPattern = '0.###';
         self::assertEquals($expectedPattern, $this->frmtr->getPattern());
 
         // what is the value of the GROUPING_USED attribute? integer value 0
         $expectedValue = 0;
         self::assertEquals($expectedValue, $this->frmtr->getAttribute(\NumberFormatter::GROUPING_USED));
 
+        // now set max fraction digits to zero
+        $this->frmtr->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
+        self::assertEquals('0', $this->frmtr->getPattern());
+
+        // now if we turn grouping back on, do the factional digits reappear in the pattern? They do not!
+        $this->frmtr->setAttribute(\NumberFormatter::GROUPING_USED, true);
+        self::assertEquals('#,##0', $this->frmtr->getPattern());
     }
 
     function testGroupingSizeAndSeparators() {

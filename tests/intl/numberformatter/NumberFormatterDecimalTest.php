@@ -1,8 +1,6 @@
 <?php
 /**
- * @package: pvc
  * @author: Doug Wilbourne (dougwilbourne@gmail.com)
- * @version: 1.0
  */
 
 namespace tests\intl\numberformatter;
@@ -25,7 +23,7 @@ class NumberFormatterDecimalTest extends TestCase {
     function testFloatParse() {
 
         // one significant digit
-        $pattern = '#0.0';
+        $pattern = '0.0';
         $this->frmtr->setPattern($pattern);
         $this->assertEquals($pattern, $this->frmtr->getPattern());
 
@@ -76,7 +74,7 @@ class NumberFormatterDecimalTest extends TestCase {
         $this->assertEquals(6, $pos);
 
         // what about'vice-versa', i.e. a pattern without any decimal - will it parse a float?
-        $pattern = '#0';
+        $pattern = '0';
         $this->frmtr->setPattern($pattern);
         $this->assertEquals($pattern, $this->frmtr->getPattern());
 

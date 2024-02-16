@@ -15,7 +15,7 @@ use IntlDateFormatter;
 class IntlDateFormatterTest extends TestCase {
 
     
-	function testDefaults() {
+	public function testDefaults() {
         
         $frmtr = new \IntlDateFormatter('en-US', IntlDateFormatter::SHORT, IntlDateFormatter::NONE, 'America/New_York', IntlDateFormatter::GREGORIAN);
         
@@ -69,7 +69,7 @@ class IntlDateFormatterTest extends TestCase {
     /**
      * @dataProvider intervalProvider
      */
-	function testEightyTwentyRule(string $interval0, string $interval1) {
+	public function testEightyTwentyRule(string $interval0, string $interval1) {
 
 	    // $this->markTestSkipped('Cannot thoroughly test IntlDateFormatter until "wrong timestamp" bug is fixed.');
 
@@ -91,7 +91,7 @@ class IntlDateFormatterTest extends TestCase {
         
     }
     
-    function intervalProvider() {
+    public function intervalProvider() {
 
 	    $testArray = array(
             '+21 = -79' => ['+21', '-79'],
@@ -106,7 +106,7 @@ class IntlDateFormatterTest extends TestCase {
     }
 
 
-    function adjustDateTimeFromNow($intervalSpec) : \DateTime {
+    public function adjustDateTimeFromNow($intervalSpec) : \DateTime {
 
 	    // new date time object
 	    $dt = new \DateTime();
@@ -126,7 +126,7 @@ class IntlDateFormatterTest extends TestCase {
     }
 	
     
-    function testLocalesTimezones() {
+    public function testLocalesTimezones() {
 
 	    $dateStrUS = '6/7/2020';
         $frmtrUS = new \IntlDateFormatter('en-US', IntlDateFormatter::SHORT, IntlDateFormatter::NONE, 'America/New_York', IntlDateFormatter::GREGORIAN);
@@ -153,7 +153,7 @@ class IntlDateFormatterTest extends TestCase {
 
     }
 
-    function testSeparators() {
+    public function testSeparators() {
 
         $frmtrUS = new \IntlDateFormatter('en-US', IntlDateFormatter::SHORT, IntlDateFormatter::NONE, 'America/New_York', IntlDateFormatter::GREGORIAN);
         $dateStr = '5/13/2020';
@@ -173,7 +173,7 @@ class IntlDateFormatterTest extends TestCase {
 
     }
 
-    function testTimeFormats() {
+    public function testTimeFormats() {
         $frmtr = new \IntlDateFormatter('en-US', IntlDateFormatter::NONE, IntlDateFormatter::SHORT, 'America/New_York', IntlDateFormatter::GREGORIAN);
 
         // default format from constructor
@@ -183,8 +183,52 @@ class IntlDateFormatterTest extends TestCase {
         $frmtr = new \IntlDateFormatter('de_DE', IntlDateFormatter::NONE, IntlDateFormatter::SHORT, 'Europe/Berlin', IntlDateFormatter::GREGORIAN);
         $expectedResult = 'HH:mm';
         $this->assertEquals($expectedResult, $frmtr->getPattern());
+    }
 
+    public function testBadLocale(): void
+    {
+        $badLocale = 'zz_ZZ';
+        $frmtr = new \IntlDateFormatter($badLocale, IntlDateFormatter::SHORT, IntlDateFormatter::NONE, 'America/New_York',
+                                        IntlDateFormatter::GREGORIAN);
+        $expected = strtotime('May 25, 1992');
+        $actual = $frmtr->parse('5/25/92');
+        /** I live in the US, seems like it kicks out an invalid Locale and substitutes the current locale */
+        self::assertEquals($expected, $actual);
+    }
+
+    public function testBadTypeParameter(): void
+    {
+        /**
+         * date types and time types range from -1 to 3
+         */
+        $badType = 9;
+        /**
+         * throws an IntlException
+         */
+        self::expectException(\IntlException::class);
+        $frmtr = new \IntlDateFormatter(\Locale::getDefault(), $badType, IntlDateFormatter::NONE, 'America/New_York',
+                                        IntlDateFormatter::GREGORIAN);
+    }
+
+    public function testBadTimeZone(): void
+    {
+        $badTimeZone = 'foo/bar';
+        /**
+         * throws an IntlException
+         */
+        self::expectException(\IntlException::class);
+        $frmtr = new \IntlDateFormatter(\Locale::getDefault(), IntlDateFormatter::SHORT, IntlDateFormatter::NONE, $badTimeZone,
+                                        IntlDateFormatter::GREGORIAN);
+    }
+
+    public function testBadCalendarType(): void
+    {
+        $badCalendarType = 9;
+        /**
+         * throws an IntlException
+         */
+        self::expectException(\IntlException::class);
+        $frmtr = new \IntlDateFormatter(\Locale::getDefault(), IntlDateFormatter::SHORT, IntlDateFormatter::NONE, 'America/New_York',
+                                        $badCalendarType);
     }
 }
-
-?>

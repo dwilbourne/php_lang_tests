@@ -36,6 +36,9 @@ class DateTimeTest extends TestCase {
         echo 'smallest date as timestamp = ' . $dt->getTimestamp() . PHP_EOL;
         $input = '-10000-12-31';
         $dt = new \DateTime($input);
+        /**
+         * hah!  as of php 8, this test fails now - looks like they fixed the DateTime object......
+         */
         self::assertEquals('2000-12-31', $dt->format('Y-m-d'));
 
         // largest date
@@ -46,6 +49,12 @@ class DateTimeTest extends TestCase {
         $input = '10000-01-01';
         $dt = new \DateTime($input);
         self::assertEquals('2000-01-01', $dt->format('Y-m-d'));
+
+        // try modifying DateTimeImmutable
+        $input = '9999-12-31 23:59:59';
+        $dt = new \DateTimeImmutable($input);
+        $expectedResult = '10000-01-01';
+        self::assertEquals($expectedResult, $dt->modify('+1 day')->format('Y-m-d'));
     }
 
     function testTimeZoneComparison() {
@@ -58,10 +67,19 @@ class DateTimeTest extends TestCase {
         $dtUtc = new DateTimeImmutable('2020-5-10', $tzUtc);
         $tsUtc = $dtUtc->getTimestamp();
 
-        // there is a 4 hour time difference between New York and Greenwich (UTC) on this date
+        /**
+         * there is a 4 hour time difference between New York and Greenwich (UTC) on this date.  Note that you MUST
+         * convert to timestamps (e.g. UTC) in order to make the calculation
+         */
         $interval = -4 * 60 * 60;
         self::assertEquals($interval, $tzNy->getOffset($dtNy));
         self::assertEquals($interval, $tsUtc - $tsNy);
+
+        /**
+         * what do you get if you just compare one datetime from another?  The comparison is not timezone sensitive
+         * either: have to convert to timestamp
+         */
+        self::assertFalse($dtNy < $dtUtc);
 
     }
 

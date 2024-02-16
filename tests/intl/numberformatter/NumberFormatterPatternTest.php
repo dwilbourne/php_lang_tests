@@ -12,6 +12,10 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class NumberFormatterPatternTest
+ *
+ * patterns always have a pattern for positive numbers.  Optionally, you can specify a different pattern for a
+ * negative number.  By default, e.g. if it is not specified, it is the pattern for positive numbers preceded by the
+ * symbol for nagative numbers (typically '-').
  */
 
 class NumberFormatterPatternTest extends TestCase {
@@ -26,15 +30,15 @@ class NumberFormatterPatternTest extends TestCase {
         $this->assertEquals($pat, $this->frmtr->getPattern());
 
         // set a new pattern
-        $pattern = '#0';
+        $pattern = '0';
         $this->frmtr->setPattern($pattern);
         $this->assertEquals($pattern, $this->frmtr->getPattern());
 
-        // setPattern returns false if you put an invalid pattern in
-        $badPattern = '0';
-        self::assertFalse($this->frmtr->setPattern($badPattern));
-        // pattern is still the old pattern, e.g. '#0'
-        $this->assertEquals($pattern, $this->frmtr->getPattern());
+        // there is nothing to prevent you from putting in something weird.
+        $badPattern = '#9gt';
+        $expectedResult = '9gt';
+        $this->frmtr->setPattern($badPattern);
+        $this->assertEquals($expectedResult, $this->frmtr->getPattern());
 
         // here's the default pattern for PATTERN_DECIMAL
         $this->frmtr = new \NumberFormatter('en-US', NumberFormatter::PATTERN_DECIMAL);

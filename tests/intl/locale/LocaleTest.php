@@ -75,6 +75,14 @@ class LocaleTest extends TestCase
         self::assertEquals('', Locale::getScript($testLocale));
 
         /**
+         * what about a locale with nothing more than a language?
+         */
+        $testLocale = 'en';
+        self::assertEquals('en', Locale::getPrimaryLanguage($testLocale));
+        self::assertEquals('', Locale::getRegion($testLocale));
+        self::assertEquals('', Locale::getScript($testLocale));
+
+        /**
          * use the canonicalize method to output the locale as a properly formed string
          */
         $testLocale = 'En_uS';
